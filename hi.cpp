@@ -1,0 +1,5 @@
+#include <hi>
+
+int main() {
+
+}
