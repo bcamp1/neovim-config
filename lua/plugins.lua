@@ -49,6 +49,16 @@ require('packer').startup(function(use)
     }
 end)
 
+require("lspconfig").clangd.setup {}
+
+-- TreeSitter Config
+require'nvim-treesitter.configs'.setup {
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting = false,
+  },
+}
+
 -- Telescope Config
 local builtin = require('telescope.builtin')
 
