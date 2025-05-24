@@ -12,14 +12,13 @@ require('packer').startup(function(use)
         'nvim-telescope/telescope.nvim', tag = '0.1.8',
         requires = { {'nvim-lua/plenary.nvim'} }
     }
-    use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
 
     use {
         'nvim-treesitter/nvim-treesitter',
         run = ':TSUpdate',
         config = function()
             require'nvim-treesitter.configs'.setup {
-                ensure_installed = { "c", "cpp", "lua", "python", "bash" }, -- Add languages you want
+                ensure_installed = { "c", "cpp", "lua", "go", "python", "bash" }, -- Add languages you want
                 highlight = {
                     enable = true,
                     additional_vim_regex_highlighting = false,
@@ -30,9 +29,6 @@ require('packer').startup(function(use)
 
     use {
 	    "neovim/nvim-lspconfig",
-	    config = function()
-		    require("lspconfig").clangd.setup {}
-	    end,
     }
 
     -- Auto completion
@@ -81,6 +77,18 @@ cmp.setup({
   })
 })
 
+-- Treesitter
+require("nvim-treesitter.configs").setup({
+  ensure_installed = { "go" },
+  highlight = {
+    enable = true,
+  },
+})
+
 -- Bufferline
 require("bufferline").setup{}
+
+-- LSP
+require("lspconfig").clangd.setup {}
+require("lspconfig").gopls.setup {}
 
