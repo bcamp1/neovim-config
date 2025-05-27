@@ -13,23 +13,21 @@ require('packer').startup(function(use)
         requires = { {'nvim-lua/plenary.nvim'} }
     }
 
-    use {
-        'nvim-treesitter/nvim-treesitter',
-        run = ':TSUpdate',
-        config = function()
-            require'nvim-treesitter.configs'.setup {
-                ensure_installed = { "c", "cpp", "lua", "go", "python", "bash" }, -- Add languages you want
-                highlight = {
-                    enable = true,
-                    additional_vim_regex_highlighting = false,
-                },
-            }
-        end,
-    }
+   -- use {
+   --     'nvim-treesitter/nvim-treesitter',
+   --     run = ':TSUpdate',
+   --     config = function()
+   --         require'nvim-treesitter.configs'.setup {
+   --             ensure_installed = { "c", "cpp", "lua", "go", "python", "bash" }, -- Add languages you want
+   --             highlight = {
+   --                 enable = true,
+   --                 additional_vim_regex_highlighting = false,
+   --             },
+   --         }
+   --     end,
+   -- }
 
-    use {
-	    "neovim/nvim-lspconfig",
-    }
+    -- use { "neovim/nvim-lspconfig" }
 
     -- Auto completion
     use {
@@ -78,17 +76,17 @@ cmp.setup({
 })
 
 -- Treesitter
-require("nvim-treesitter.configs").setup({
-  ensure_installed = { "go" },
-  highlight = {
-    enable = true,
-  },
-})
+-- require("nvim-treesitter.configs").setup({
+  --ensure_installed = { "go" },
+  --highlight = {
+    --enable = true,
+  --},
+--})
 
 -- Bufferline
 require("bufferline").setup{}
 
 -- LSP
-require("lspconfig").clangd.setup {}
-require("lspconfig").gopls.setup {}
+-- require("lspconfig").clangd.setup {}
+-- require("lspconfig").gopls.setup {}
 
