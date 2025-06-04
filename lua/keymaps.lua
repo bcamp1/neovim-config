@@ -53,3 +53,9 @@ vim.keymap.set("n", "<leader>vk", ":e ~/.config/nvim/lua/keymaps.lua<CR>", { sil
 vim.keymap.set("n", "<leader>vs", ":e ~/.config/nvim/lua/sets.lua<CR>", { silent = false })
 vim.keymap.set("n", "<leader>vp", ":e ~/.config/nvim/lua/plugins.lua<CR>", { silent = false })
 
+-- My own scripts
+vim.api.nvim_create_user_command('Flash', function()
+    vim.cmd('!echo "Flashing to chip..."; ./flash.sh 2> ./flash.log && echo "Flash succeeded." || cat ./flash.log')
+end, {})
+
+

@@ -18,7 +18,7 @@ require('packer').startup(function(use)
         run = ':TSUpdate',
         config = function()
             require'nvim-treesitter.configs'.setup {
-                ensure_installed = { "c", "cpp", "lua", "go", "python", "bash" }, -- Add languages you want
+                ensure_installed = { "c", "cpp", "lua", "go", "python", "bash", "yaml" }, -- Add languages you want
                 highlight = {
                     enable = true,
                     additional_vim_regex_highlighting = false,
