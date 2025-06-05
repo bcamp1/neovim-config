@@ -58,4 +58,5 @@ vim.api.nvim_create_user_command('Flash', function()
     vim.cmd('!echo "Flashing to chip..."; ./flash.sh 2> ./flash.log && echo "Flash succeeded." || cat ./flash.log')
 end, {})
 
+vim.keymap.set("n", "<leader>i", ":lua vim.diagnostic.open_float(nil, { focusable = false })<CR>", { silent = true })
 
