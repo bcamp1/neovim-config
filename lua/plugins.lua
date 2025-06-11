@@ -43,6 +43,9 @@ require('packer').startup(function(use)
             'saadparwaiz1/cmp_luasnip', -- snippet completion
         }
     }
+    -- VimTeX plugin
+    use 'lervag/vimtex'
+
 end)
 
 require("lspconfig").clangd.setup {}
@@ -101,4 +104,13 @@ require("bufferline").setup{}
 -- LSP
 require("lspconfig").clangd.setup {}
 require("lspconfig").gopls.setup {}
+require("lspconfig").pyright.setup({
+  on_attach = on_attach,
+})
+
+-- Enable vimtex
+vim.g.vimtex_compiler_method = 'latexmk'  -- the recommended compiler
+vim.g.vimtex_view_method = 'skim'
+vim.g.vimtex_view_skim_sync = 1       -- enable SyncTeX support
+vim.g.vimtex_view_skim_activate = 1   -- bring Skim to front after forward search
 
