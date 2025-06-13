@@ -59,4 +59,5 @@ vim.api.nvim_create_user_command('Flash', function()
 end, {})
 
 vim.keymap.set("n", "<leader>i", ":lua vim.diagnostic.open_float(nil, { focusable = false })<CR>", { silent = true })
+vim.keymap.set("n", "<leader>h", ":noh<CR>", { silent = true })
 
