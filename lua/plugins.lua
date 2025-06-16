@@ -46,8 +46,12 @@ require('packer').startup(function(use)
     -- VimTeX plugin
     use 'lervag/vimtex'
 
-end)
+use({
+    "kylechui/nvim-surround",
+    tag = "*" -- Use for stability; omit to use `main` branch for the latest features
+})
 
+end)
 require("lspconfig").clangd.setup {}
 
 -- TreeSitter Config
@@ -108,8 +112,106 @@ require("lspconfig").pyright.setup({
   on_attach = on_attach,
 })
 
+require("nvim-surround").setup({
+    surrounds = {
+        ["c"] = {
+            add = function()
+                local cfg = require("nvim-surround.config")
+                local cmd = cfg.get_input("Command: ")
+                return { { "\\" .. cmd .. "{" }, { "}" } }
+            end,
+            find = [=[\[^\{}%[%]]-%b{}]=],
+            delete = [[^(\[^\{}]-{)().-(})()$]],
+            change = {
+                target = [[^\([^\{}]-)()%b{}()()$]],
+                replacement = function()
+                    local cfg = require("nvim-surround.config")
+                    local cmd = cfg.get_input("Command: ")
+                    return { { cmd }, { "" } }
+                end
+            },
+        },
+        ["m"] = {
+            add = function()
+                local cfg = require("nvim-surround.config")
+                local cmd = "texttt"
+                return { { "\\" .. cmd .. "{" }, { "}" } }
+            end,
+            find = [=[\[^\{}%[%]]-%b{}]=],
+            delete = [[^(\[^\{}]-{)().-(})()$]],
+            change = {
+                target = [[^\([^\{}]-)()%b{}()()$]],
+                replacement = function()
+                    local cfg = require("nvim-surround.config")
+                    local cmd = cfg.get_input("Command: ")
+                    return { { cmd }, { "" } }
+                end
+            },
+        },
+        ["C"] = {
+            add = function()
+                local cfg = require("nvim-surround.config")
+                local cmd, opts = cfg.get_input("Command: "), cfg.get_input("Options: ")
+                return { { "\\" .. cmd .. "[" .. opts .. "]{" }, { "}" } }
+            end,
+            find = [[\[^\{}]-%b[]%b{}]],
+            delete = [[^(\[^\{}]-%b[]{)().-(})()$]],
+            change = {
+                target = [[^\([^\{}]-)()%[(.*)()%]%b{}$]],
+                replacement = function()
+                    local cfg = require("nvim-surround.config")
+                    local cmd, opts = cfg.get_input("Command: "), cfg.get_input("Options: ")
+                    return { { cmd }, { opts } }
+                end
+            },
+        },
+        ["e"] = {
+            add = function()
+                local cfg = require("nvim-surround.config")
+                local env = cfg.get_input("Environment: ")
+                return { { "\\begin{" .. env .. "}" }, { "\\end{" .. env .. "}" } }
+            end,
+            find = tex_find_environment,
+            delete = [[^(\begin%b{})().*(\end%b{})()$]],
+            change = {
+                target = [[^\begin{(.-)()%}.*\end{(.-)()}$]],
+                replacement = function()
+                    local env = require("nvim-surround.config").get_input("Environment: ")
+                    return { { env }, { env } }
+                end,
+            }
+        },
+        ["E"] = {
+            add = function()
+                local cfg = require("nvim-surround.config")
+                local env, opts = cfg.get_input("Environment: "), cfg.get_input("Options: ")
+                return { { "\\begin{" .. env .. "}[" .. opts .. "]" }, { "\\end{" .. env .. "}" } }
+            end,
+            find = tex_find_environment,
+            delete = [[^(\begin%b{}%b[])().*(\end%b{})()$]],
+            change = {
+                target = [[^\begin%b{}%[(.-)()()()%].*\end%b{}$]],
+                replacement = function()
+                    local cfg = require("nvim-surround.config")
+                    local env = cfg.get_input("Environment options: ")
+                    return { { env }, { "" } }
+                end,
+            }
+        },
+    },
+})
+
 -- Enable vimtex
-vim.g.vimtex_compiler_method = 'latexmk'  -- the recommended compiler
+vim.g.vimtex_compiler_latexmk = {
+    options = {
+        '-verbose',
+        '-file-line-error',
+        '-synctex=1',
+        '-interaction=nonstopmode',
+        '-shell-escape',
+    },
+}
+vim.g.vimtex_compiler_method = 'latexmk -shell-escape'  -- the recommended compiler
 vim.g.vimtex_view_method = 'skim'
 vim.g.vimtex_view_skim_sync = 1       -- enable SyncTeX support
 vim.g.vimtex_view_skim_activate = 1   -- bring Skim to front after forward search
