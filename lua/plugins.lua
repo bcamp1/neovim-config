@@ -31,6 +31,7 @@ require('packer').startup(function(use)
 	    "neovim/nvim-lspconfig",
     }
 
+    use ({ 'projekt0n/github-nvim-theme' })
     -- Auto completion
     use {
         'hrsh7th/nvim-cmp',
@@ -66,7 +67,7 @@ require'nvim-treesitter.configs'.setup {
 local builtin = require('telescope.builtin')
 
 vim.keymap.set('n', '<C-p>', builtin.find_files, { desc = 'Telescope find files' })
-vim.keymap.set('n', '<C-S-p>', builtin.live_grep, { desc = 'Telescope live grep' })
+vim.keymap.set('n', '<C-s>', builtin.live_grep, { desc = 'Telescope live grep' })
 -- vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
 -- vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
 

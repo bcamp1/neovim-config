@@ -58,6 +58,19 @@ vim.api.nvim_create_user_command('Flash', function()
     vim.cmd('!echo "Flashing to chip..."; ./flash.sh 2> ./flash.log && echo "Flash succeeded." || cat ./flash.log')
 end, {})
 
+-- Toggle true and false
+local function toggle_true_false()
+  local word = vim.fn.expand("<cword>")
+  if word == "true" then
+    vim.cmd("normal! ciwfalse")
+  elseif word == "false" then
+    vim.cmd("normal! ciwtrue")
+  else
+    print("Not on 'true' or 'false'")
+  end
+end
+
+vim.keymap.set("n", "<leader>t", toggle_true_false, { desc = "Toggle true/false" })
 vim.keymap.set("n", "<leader>i", ":lua vim.diagnostic.open_float(nil, { focusable = false })<CR>", { silent = true })
 vim.keymap.set("n", "<leader>h", ":noh<CR>", { silent = true })
 
