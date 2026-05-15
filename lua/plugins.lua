@@ -52,6 +52,12 @@ use({
     tag = "*" -- Use for stability; omit to use `main` branch for the latest features
 })
 
+use {
+    "ThePrimeagen/harpoon",
+    branch = "harpoon2",
+    requires = { { "nvim-lua/plenary.nvim" } }
+}
+
 end)
 require("lspconfig").clangd.setup {}
 
@@ -216,4 +222,16 @@ vim.g.vimtex_compiler_method = 'latexmk -shell-escape'  -- the recommended compi
 vim.g.vimtex_view_method = 'skim'
 vim.g.vimtex_view_skim_sync = 1       -- enable SyncTeX support
 vim.g.vimtex_view_skim_activate = 1   -- bring Skim to front after forward search
+
+-- Harpoon
+local harpoon = require("harpoon")
+harpoon:setup()
+
+vim.keymap.set("n", "<leader>a", function() harpoon:list():add() end, { desc = "Harpoon add file" })
+vim.keymap.set("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "Harpoon menu" })
+
+vim.keymap.set("n", "<leader>1", function() harpoon:list():select(1) end, { desc = "Harpoon 1" })
+vim.keymap.set("n", "<leader>2", function() harpoon:list():select(2) end, { desc = "Harpoon 2" })
+vim.keymap.set("n", "<leader>3", function() harpoon:list():select(3) end, { desc = "Harpoon 3" })
+vim.keymap.set("n", "<leader>4", function() harpoon:list():select(4) end, { desc = "Harpoon 4" })
 
