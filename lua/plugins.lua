@@ -15,15 +15,18 @@ require('packer').startup(function(use)
 
     use {
         'nvim-treesitter/nvim-treesitter',
-        run = ':TSUpdate',
+        branch = 'main',
+        run = function()
+            require('nvim-treesitter').update()
+        end,
         config = function()
-            require'nvim-treesitter.configs'.setup {
-                ensure_installed = { "c", "cpp", "lua", "go", "python", "bash", "yaml" }, -- Add languages you want
-                highlight = {
-                    enable = true,
-                    additional_vim_regex_highlighting = false,
-                },
-            }
+            require('nvim-treesitter').install({
+                "c", "cpp", "lua", "go", "python", "bash", "yaml",
+            })
+            vim.api.nvim_create_autocmd('FileType', {
+                pattern = { "c", "cpp", "lua", "go", "python", "bash", "yaml" },
+                callback = function() vim.treesitter.start() end,
+            })
         end,
     }
 
@@ -59,15 +62,6 @@ use {
 }
 
 end)
-require("lspconfig").clangd.setup {}
-
--- TreeSitter Config
-require'nvim-treesitter.configs'.setup {
-  highlight = {
-    enable = true,
-    additional_vim_regex_highlighting = false,
-  },
-}
 
 -- Telescope Config
 local builtin = require('telescope.builtin')
@@ -101,23 +95,11 @@ cmp.setup({
   })
 })
 
--- Treesitter
-require("nvim-treesitter.configs").setup({
-  ensure_installed = { "go" },
-  highlight = {
-    enable = true,
-  },
-})
-
 -- Bufferline
 require("bufferline").setup{}
 
 -- LSP
-require("lspconfig").clangd.setup {}
-require("lspconfig").gopls.setup {}
-require("lspconfig").pyright.setup({
-  on_attach = on_attach,
-})
+vim.lsp.enable({ "clangd", "gopls", "pyright" })
 
 require("nvim-surround").setup({
     surrounds = {
