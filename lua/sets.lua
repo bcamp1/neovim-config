@@ -32,5 +32,21 @@ vim.opt.colorcolumn = "80"
 
 vim.cmd("colo gruvbox")
 
+-- Auto-reload files changed on disk (e.g. after Claude Code edits them).
+-- autoread (on by default) does the reload; these events force the check.
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "TermClose", "TermLeave" }, {
+  callback = function()
+    if vim.fn.getcmdwintype() == "" then
+      vim.cmd("checktime")
+    end
+  end,
+})
+-- Notify when a buffer was reloaded from disk.
+vim.api.nvim_create_autocmd("FileChangedShellPost", {
+  callback = function()
+    vim.notify("File changed on disk — buffer reloaded", vim.log.levels.WARN)
+  end,
+})
+
 
 

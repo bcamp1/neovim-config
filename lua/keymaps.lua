@@ -54,11 +54,20 @@ vim.keymap.set("n", "<C-y>", ":bd<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>vk", ":e ~/.config/nvim/lua/keymaps.lua<CR>", { silent = false })
 vim.keymap.set("n", "<leader>vs", ":e ~/.config/nvim/lua/sets.lua<CR>", { silent = false })
 vim.keymap.set("n", "<leader>vp", ":e ~/.config/nvim/lua/plugins.lua<CR>", { silent = false })
+-- Save + source the current config file (use on keymaps.lua / sets.lua;
+-- restart instead for plugins.lua — re-sourcing packer isn't clean).
+vim.keymap.set("n", "<leader>vr", "<cmd>w | source %<CR>", { desc = "Save + source current config file" })
 
 -- My own scripts
 vim.api.nvim_create_user_command('Flash', function()
     vim.cmd('!echo "Flashing to chip..."; ./flash.sh 2> ./flash.log && echo "Flash succeeded." || cat ./flash.log')
 end, {})
+
+-- Build, flash, and run on the target (runs from nvim's cwd = project root)
+vim.keymap.set("n", "<leader>r", "<cmd>!cargo run --release<CR>", { desc = "cargo run --release" })
+
+-- Reload buffers changed on disk (e.g. after Claude Code edits files)
+vim.keymap.set("n", "<leader>R", "<cmd>checktime<CR>", { desc = "Reload changed files from disk" })
 
 -- Toggle true and false
 local function toggle_true_false()

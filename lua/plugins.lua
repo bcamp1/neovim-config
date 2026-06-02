@@ -21,10 +21,10 @@ require('packer').startup(function(use)
         end,
         config = function()
             require('nvim-treesitter').install({
-                "c", "cpp", "lua", "go", "python", "bash", "yaml",
+                "c", "cpp", "lua", "go", "python", "bash", "yaml", "rust",
             })
             vim.api.nvim_create_autocmd('FileType', {
-                pattern = { "c", "cpp", "lua", "go", "python", "bash", "yaml" },
+                pattern = { "c", "cpp", "lua", "go", "python", "bash", "yaml", "rust" },
                 callback = function() vim.treesitter.start() end,
             })
         end,
@@ -99,7 +99,27 @@ cmp.setup({
 require("bufferline").setup{}
 
 -- LSP
-vim.lsp.enable({ "clangd", "gopls", "pyright" })
+-- Give every language server nvim-cmp's completion capabilities so autocomplete
+-- is fully featured (snippets, auto-imports, and dependency-aware Rust
+-- completions from rust-analyzer instead of buffer-word guesses).
+vim.lsp.config("*", {
+    capabilities = require("cmp_nvim_lsp").default_capabilities(),
+})
+
+-- rust-analyzer: run clippy (not just `cargo check`) for richer on-save lints.
+-- It picks up the project's deps + the thumbv7em target from .cargo/config.toml.
+vim.lsp.config("rust_analyzer", {
+    settings = {
+        ["rust-analyzer"] = {
+            check = { command = "clippy" },
+        },
+    },
+})
+
+vim.lsp.enable({ "clangd", "gopls", "pyright", "rust_analyzer" })
+
+-- Surface rust-analyzer / clippy diagnostics inline.
+vim.diagnostic.config({ virtual_text = true })
 
 require("nvim-surround").setup({
     surrounds = {
